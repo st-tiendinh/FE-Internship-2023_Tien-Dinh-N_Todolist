@@ -139,7 +139,10 @@ const TodoList = () => {
                     autoFocus
                   />
                 ) : (
-                  <span className='todo-title' onDoubleClick={() => handleDoubleClick(task.id, task.title)}>
+                  <span
+                    className={task.completed ? 'todo-title text-completed' : 'todo-title'}
+                    onDoubleClick={() => handleDoubleClick(task.id, task.title)}
+                  >
                     {task.title}
                   </span>
                 )}
