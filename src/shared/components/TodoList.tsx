@@ -115,11 +115,11 @@ const TodoList = () => {
         />
 
         <ul className='todo-list'>
-          {filteredTasks.map((task, index) => {
+          {filteredTasks.map((task) => {
             return (
               <TodoItem
+                key={task.id}
                 editedText={task.title}
-                key={index}
                 {...task}
                 editableTaskId={editableTaskId}
                 {...myHandleFunc}
