@@ -2,14 +2,23 @@ import { useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import completedAllBtn from '../assets/images/ic-todo.svg';
+import TodoItem from './TodoItem';
 
 export enum StorageKey {
   TASK = 'tasks',
 }
 
+export interface TaskInterface {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
 const TodoList = () => {
   const [input, setInput] = useState<string>('');
-  const [tasks, setTasks] = useState<any[]>(JSON.parse(localStorage.getItem(StorageKey.TASK) as string) || []);
+  const [tasks, setTasks] = useState<TaskInterface[]>(
+    JSON.parse(localStorage.getItem(StorageKey.TASK) as string) || []
+  );
   const [allCompleted, setAllCompleted] = useState<boolean>(false);
   const [showActive, setShowActive] = useState<boolean>(false);
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
@@ -17,34 +26,37 @@ const TodoList = () => {
   const [editableTaskId, setEditableTaskId] = useState(null);
   const [editedText, setEditedText] = useState('');
 
-  const handleChange = (e: any) => {
+  const handleInputChange = (e: any) => {
     setInput(e.target.value);
   };
 
-  const handleSubmit = () => {
-    if (input.trim() !== '') {
-      setTasks([...tasks, { id: uuidv4(), title: input.trim(), completed: false }]);
-      setInput('');
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter') {
+      if (input.trim() !== '') {
+        setTasks([...tasks, { id: uuidv4(), title: input.trim(), completed: false }]);
+        setInput('');
+      }
     }
   };
 
-  const handleDelete = (id: number) => {
-    setTasks(tasks.filter((todo) => todo.id !== id));
+  const handleTaskItemKeyDown = (e: any, id: string) => {
+    if (e.key === 'Enter') {
+      const findTask = tasks.find((task) => task.id === id);
+      if (findTask) {
+        findTask.title = editedText;
+        setEditableTaskId(null);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+      }
+    }
   };
 
-  const handleCompleted = (id: number) => {
+  const handleCompleted = (id: string) => {
     setTasks(
       tasks.map((task) => {
         return task.id === id ? { ...task, completed: !task.completed } : task;
       })
     );
   };
-
-  const filteredTasks = useMemo(() => {
-    return tasks.filter((task) => {
-      return (showActive && !task.completed) || (showCompleted && task.completed) || (!showActive && !showCompleted);
-    });
-  }, [showActive, showCompleted, tasks]);
 
   const handleSelectAllCompleted = () => {
     setAllCompleted(!allCompleted);
@@ -60,22 +72,9 @@ const TodoList = () => {
     setTasks((prevTasks) => prevTasks.filter((task) => !task.completed));
   };
 
-  const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter') {
-      handleSubmit();
-    }
+  const handleDelete = (id: string) => {
+    setTasks(tasks.filter((todo) => todo.id !== id));
   };
-
-  const handleTaskItemKeyDown = (e: any, id: number) => {
-    if (e.key === 'Enter') {
-      const findTask = tasks.find((task) => task.id === id);
-      findTask.title = editedText;
-      setEditableTaskId(null);
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-  };
-
-  const activeTasksCount = useMemo(() => tasks.filter((task) => !task.completed).length, [tasks]);
 
   const handleDoubleClick = (taskId: any, taskTitle: any) => {
     setEditableTaskId(taskId);
@@ -86,18 +85,37 @@ const TodoList = () => {
     setEditedText(e.target.value);
   };
 
-  const handleTaskItemInputBlur = (id: number) => {
+  const handleTaskItemInputBlur = (id: string) => {
     if (editedText.trim() !== '') {
       const findTask = tasks.find((task) => task.id === id);
-      findTask.title = editedText;
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      setEditableTaskId(null);
+      if (findTask) {
+        findTask.title = editedText;
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        setEditableTaskId(null);
+      }
     }
   };
+
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) => {
+      return (showActive && !task.completed) || (showCompleted && task.completed) || (!showActive && !showCompleted);
+    });
+  }, [showActive, showCompleted, tasks]);
+
+  const activeTasksCount = useMemo(() => tasks.filter((task) => !task.completed).length, [tasks]);
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
+
+  const myHandleFunc = {
+    handleCompleted,
+    handleTaskItemKeyDown,
+    handleTaskItemInputBlur,
+    handleDoubleClick,
+    handleDelete,
+    handleEditText,
+  };
 
   return (
     <div className='wrapper'>
@@ -109,46 +127,15 @@ const TodoList = () => {
             type='text'
             value={input}
             autoFocus
-            onChange={handleChange}
+            onChange={handleInputChange}
             onKeyDown={(e) => handleKeyDown(e)}
             placeholder='What need to be done?'
           />
         </div>
 
         <ul className='todo-list'>
-          {filteredTasks.map((task) => {
-            return (
-              <li key={task.id} className='todo-item'>
-                <input
-                  type='checkbox'
-                  checked={task.completed}
-                  onChange={() => handleCompleted(task.id)}
-                  className='todo-item-status-checkbox'
-                  id={task.id}
-                />
-                <label className='todo-item-status-label' htmlFor={task.id}></label>
-
-                {editableTaskId === task.id ? (
-                  <input
-                    className='todo-edit-input'
-                    type='text'
-                    value={editedText}
-                    onChange={handleEditText}
-                    onKeyDown={(e) => handleTaskItemKeyDown(e, task.id)}
-                    onBlur={(e) => handleTaskItemInputBlur(task.id)}
-                    autoFocus
-                  />
-                ) : (
-                  <span
-                    className={task.completed ? 'todo-title text-completed' : 'todo-title'}
-                    onDoubleClick={() => handleDoubleClick(task.id, task.title)}
-                  >
-                    {task.title}
-                  </span>
-                )}
-                <span className='badge badge-remove' onClick={() => handleDelete(task.id)}></span>
-              </li>
-            );
+          {filteredTasks.map((task, index) => {
+            return <TodoItem key={index} {...task} editableTaskId={editableTaskId} {...myHandleFunc} />;
           })}
         </ul>
 
@@ -165,6 +152,7 @@ const TodoList = () => {
               >
                 <span className={`todo-filter-type ${!showActive && !showCompleted && 'active'}`}>All</span>
               </li>
+
               <li
                 className='todo-filter-item'
                 onClick={() => {
@@ -174,6 +162,7 @@ const TodoList = () => {
               >
                 <span className={`todo-filter-type ${showActive && 'active'}`}>Active</span>
               </li>
+
               <li
                 className='todo-filter-item'
                 onClick={() => {
