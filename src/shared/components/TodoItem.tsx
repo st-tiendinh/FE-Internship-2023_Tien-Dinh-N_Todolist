@@ -1,6 +1,8 @@
+import React from "react";
+
 const TodoItem = ({
   id,
-  completed,
+  status,
   title,
   editableTaskId,
   editedText,
@@ -15,7 +17,7 @@ const TodoItem = ({
     <li key={id} className='todo-item'>
       <input
         type='checkbox'
-        checked={completed}
+        checked={Boolean(status)}
         onChange={() => handleCompleted(id)}
         className='todo-item-status-checkbox'
         id={id}
@@ -29,12 +31,12 @@ const TodoItem = ({
           value={editedText}
           onChange={handleEditText}
           onKeyDown={(e) => handleTaskItemKeyDown(e, id)}
-          onBlur={(e) => handleTaskItemInputBlur(id)}
+          onBlur={() => handleTaskItemInputBlur(id)}
           autoFocus
         />
       ) : (
         <span
-          className={completed ? 'todo-title text-completed' : 'todo-title'}
+          className={status ? 'todo-title text-completed' : 'todo-title'}
           onDoubleClick={() => handleDoubleClick(id, title)}
         >
           {title}
@@ -45,4 +47,4 @@ const TodoItem = ({
   );
 };
 
-export default TodoItem;
+export default React.memo(TodoItem);
