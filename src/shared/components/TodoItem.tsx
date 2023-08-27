@@ -1,4 +1,19 @@
-import React from "react";
+import React, { ChangeEvent } from 'react';
+import { StatusEnum } from '../../services/TodoItemService';
+
+interface TodoItemProps {
+  id: string;
+  status: StatusEnum;
+  title: string;
+  editableTaskId: string;
+  editedText: string;
+  handleCompleted: (id: string) => void;
+  handleTaskItemKeyDown: (event: React.KeyboardEvent<HTMLInputElement>, id: string) => void;
+  handleTaskItemInputBlur: (id: string) => void;
+  handleDoubleClick: (id: string, title: string) => void;
+  handleDelete: (id: string) => void;
+  handleEditText: (e: ChangeEvent<HTMLInputElement>) => void;
+}
 
 const TodoItem = ({
   id,
@@ -12,7 +27,7 @@ const TodoItem = ({
   handleDoubleClick,
   handleDelete,
   handleEditText,
-}: any) => {
+}: TodoItemProps) => {
   return (
     <li key={id} className='todo-item'>
       <input

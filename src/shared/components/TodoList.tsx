@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, ChangeEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { TaskInterface, StorageKey, StatusEnum } from '../../services/TodoItemService';
@@ -66,7 +66,7 @@ const TodoList = () => {
     setEditedText(title);
   };
 
-  const handleEditText = (e: any) => {
+  const handleEditText = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedText(e.target.value);
   };
 
@@ -109,11 +109,22 @@ const TodoList = () => {
   return (
     <div className='wrapper'>
       <div className='todo'>
-        <TodoHeader handleSelectAllCompleted={handleSelectAllCompleted} handleHeaderInputKeyDown={handleHeaderInputKeyDown} />
+        <TodoHeader
+          handleSelectAllCompleted={handleSelectAllCompleted}
+          handleHeaderInputKeyDown={handleHeaderInputKeyDown}
+        />
 
         <ul className='todo-list'>
           {filteredTasks.map((task, index) => {
-            return <TodoItem key={index} {...task} editableTaskId={editableTaskId} {...myHandleFunc} />;
+            return (
+              <TodoItem
+                editedText={task.title}
+                key={index}
+                {...task}
+                editableTaskId={editableTaskId}
+                {...myHandleFunc}
+              />
+            );
           })}
         </ul>
 
