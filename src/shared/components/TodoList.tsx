@@ -75,7 +75,7 @@ const TodoList = () => {
       const findTask = tasks.find((task) => task.id === id);
       if (findTask) {
         findTask.title = editedText;
-        localStorage.setItem('tasks', JSON.stringify(tasks));
+        localStorage.setItem(StorageKey.TASK, JSON.stringify(tasks));
         setEditableTaskId('');
       }
     }
@@ -97,10 +97,7 @@ const TodoList = () => {
   return (
     <div className='wrapper'>
       <div className='todo'>
-        <TodoHeader
-          handleSelectAllCompleted={handleSelectAllCompleted}
-          handleSubmitByEnter={handleSubmitByEnter}
-        />
+        <TodoHeader handleSelectAllCompleted={handleSelectAllCompleted} handleSubmitByEnter={handleSubmitByEnter} />
 
         <ul className='todo-list'>
           {tasks
