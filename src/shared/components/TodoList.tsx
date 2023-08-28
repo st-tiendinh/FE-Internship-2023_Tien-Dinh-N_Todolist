@@ -81,8 +81,6 @@ const TodoList = () => {
     }
   };
 
-  const activeTasksCount = useMemo(() => tasks.filter((task) => task.status === StatusEnum.ACTIVE).length, [tasks]);
-
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
@@ -128,7 +126,9 @@ const TodoList = () => {
 
         {JSON.stringify(tasks) !== '[]' ? (
           <div className='todo-footer'>
-            <span className='todo-footer-quantity'>{activeTasksCount} items left</span>
+            <span className='todo-footer-quantity'>
+              {tasks.filter((task) => task.status === StatusEnum.ACTIVE).length} items left
+            </span>
             <ul className='todo-filter-list'>
               <li
                 className='todo-filter-item'
