@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { TaskInterface, StorageKey, StatusEnum } from '../../services/TodoItemService';
@@ -29,7 +29,7 @@ const TodoList = () => {
   const handleHeaderInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, input: string) => {
     if (e.key === 'Enter') {
       if (input.trim() !== '') {
-        setTasks([...tasks, { id: uuidv4(), title: input.trim(), status: StatusEnum.ACTIVE }]);
+        setTasks([{ id: uuidv4(), title: input.trim(), status: StatusEnum.ACTIVE }, ...tasks]);
       }
     }
   };

@@ -45,7 +45,7 @@ const TodoItem = ({
           type='text'
           value={editedText}
           onChange={handleEditText}
-          onKeyDown={(e) => handleTaskItemKeyDown(e, id)}
+          onKeyUp={(e) => handleTaskItemKeyDown(e, id)}
           onBlur={() => handleTaskItemInputBlur(id)}
           autoFocus
         />
