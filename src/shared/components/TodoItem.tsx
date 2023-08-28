@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { StatusEnum } from '../../services/TodoItemService';
+import { StatusEnum } from '../../app/core/models/todoItem';
 
 interface TodoItemProps {
   id: string;

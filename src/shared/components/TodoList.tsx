@@ -1,14 +1,13 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { TaskInterface, StorageKey, StatusEnum } from '../../services/TodoItemService';
+import { TaskInterface, StorageKey, StatusEnum } from '../../app/core/models/todoItem';
 import TodoItem from './TodoItem';
 import TodoHeader from './TodoHeader';
+import { getFromLocalStorage } from '../utils/local-storage';
 
 const TodoList = () => {
-  const [tasks, setTasks] = useState<TaskInterface[]>(
-    JSON.parse(localStorage.getItem(StorageKey.TASK) as string) || []
-  );
+  const [tasks, setTasks] = useState<TaskInterface[]>(getFromLocalStorage(StorageKey.TASK, []));
   const [allCompleted, setAllCompleted] = useState<StatusEnum>(0);
   const [showActive, setShowActive] = useState<boolean>(false);
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
@@ -28,7 +27,7 @@ const TodoList = () => {
 
   const handleSubmitByEnter = (e: React.KeyboardEvent<HTMLInputElement>, input: string) => {
     if (e.key === 'Enter') {
-      if (input.trim() !== '') {
+      if (input.trim()) {
         setTasks([{ id: uuidv4(), title: input.trim(), status: StatusEnum.ACTIVE }, ...tasks]);
       }
     }
@@ -39,8 +38,8 @@ const TodoList = () => {
       const findTask = tasks.find((task) => task.id === id);
       if (findTask) {
         findTask.title = editedText;
+        setTasks([...tasks]);
         setEditableTaskId('');
-        localStorage.setItem('tasks', JSON.stringify(tasks));
       }
     }
   };
@@ -71,18 +70,18 @@ const TodoList = () => {
   };
 
   const handleTaskItemInputBlur = (id: string) => {
-    if (editedText.trim() !== '') {
+    if (editedText.trim()) {
       const findTask = tasks.find((task) => task.id === id);
       if (findTask) {
         findTask.title = editedText;
-        localStorage.setItem(StorageKey.TASK, JSON.stringify(tasks));
+        setTasks([...tasks]);
         setEditableTaskId('');
       }
     }
   };
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem(StorageKey.TASK, JSON.stringify(tasks));
   }, [tasks]);
 
   const myHandleFunc = {
