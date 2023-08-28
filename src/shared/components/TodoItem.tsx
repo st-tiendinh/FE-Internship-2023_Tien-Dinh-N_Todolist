@@ -8,7 +8,7 @@ interface TodoItemProps {
   editableTaskId: string;
   editedText: string;
   handleCompleted: (id: string) => void;
-  handleTaskItemKeyDown: (event: React.KeyboardEvent<HTMLInputElement>, id: string) => void;
+  handleSubmitEditedTask: (event: React.KeyboardEvent<HTMLInputElement>, id: string) => void;
   handleTaskItemInputBlur: (id: string) => void;
   handleDoubleClick: (id: string, title: string) => void;
   handleDelete: (id: string) => void;
@@ -22,7 +22,7 @@ const TodoItem = ({
   editableTaskId,
   editedText,
   handleCompleted,
-  handleTaskItemKeyDown,
+  handleSubmitEditedTask,
   handleTaskItemInputBlur,
   handleDoubleClick,
   handleDelete,
@@ -45,7 +45,7 @@ const TodoItem = ({
           type='text'
           value={editedText}
           onChange={handleEditText}
-          onKeyUp={(e) => handleTaskItemKeyDown(e, id)}
+          onKeyUp={(e) => handleSubmitEditedTask(e, id)}
           onBlur={() => handleTaskItemInputBlur(id)}
           autoFocus
         />

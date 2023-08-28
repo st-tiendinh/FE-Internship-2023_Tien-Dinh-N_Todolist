@@ -26,7 +26,7 @@ const TodoList = () => {
     );
   };
 
-  const handleHeaderInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, input: string) => {
+  const handleSubmitByEnter = (e: React.KeyboardEvent<HTMLInputElement>, input: string) => {
     if (e.key === 'Enter') {
       if (input.trim() !== '') {
         setTasks([{ id: uuidv4(), title: input.trim(), status: StatusEnum.ACTIVE }, ...tasks]);
@@ -34,7 +34,7 @@ const TodoList = () => {
     }
   };
 
-  const handleTaskItemKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, id: string) => {
+  const handleSubmitEditedTask = (e: React.KeyboardEvent<HTMLInputElement>, id: string) => {
     if (e.key === 'Enter') {
       const findTask = tasks.find((task) => task.id === id);
       if (findTask) {
@@ -87,7 +87,7 @@ const TodoList = () => {
 
   const myHandleFunc = {
     handleCompleted,
-    handleTaskItemKeyDown,
+    handleSubmitEditedTask,
     handleTaskItemInputBlur,
     handleDoubleClick,
     handleDelete,
@@ -99,7 +99,7 @@ const TodoList = () => {
       <div className='todo'>
         <TodoHeader
           handleSelectAllCompleted={handleSelectAllCompleted}
-          handleHeaderInputKeyDown={handleHeaderInputKeyDown}
+          handleSubmitByEnter={handleSubmitByEnter}
         />
 
         <ul className='todo-list'>
@@ -124,7 +124,7 @@ const TodoList = () => {
             })}
         </ul>
 
-        {JSON.stringify(tasks) !== '[]' ? (
+        {tasks.length ? (
           <div className='todo-footer'>
             <span className='todo-footer-quantity'>
               {tasks.filter((task) => task.status === StatusEnum.ACTIVE).length} items left

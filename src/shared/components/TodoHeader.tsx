@@ -4,10 +4,10 @@ import completedAllBtn from '../../assets/images/ic-todo.svg';
 
 interface TodoHeaderProps {
   handleSelectAllCompleted: () => void;
-  handleHeaderInputKeyDown: (event: React.KeyboardEvent<HTMLInputElement>, input: string) => void;
+  handleSubmitByEnter: (event: React.KeyboardEvent<HTMLInputElement>, input: string) => void;
 }
 
-const TodoHeader = ({ handleSelectAllCompleted, handleHeaderInputKeyDown }: TodoHeaderProps) => {
+const TodoHeader = ({ handleSelectAllCompleted, handleSubmitByEnter }: TodoHeaderProps) => {
   const [input, setInput] = useState<string>('');
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +15,7 @@ const TodoHeader = ({ handleSelectAllCompleted, handleHeaderInputKeyDown }: Todo
   };
 
   const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    handleHeaderInputKeyDown(e, input);
+    handleSubmitByEnter(e, input);
     if (e.key === 'Enter') {
       setInput('');
     }
