@@ -115,7 +115,7 @@ const TodoList = () => {
               return (
                 <TodoItem
                   key={task.id}
-                  editedText={task.title}
+                  editedText={editedText}
                   {...task}
                   editableTaskId={editableTaskId}
                   {...myHandleFunc}
