@@ -81,16 +81,6 @@ const TodoList = () => {
     }
   };
 
-  const filteredTasks = useMemo(() => {
-    return tasks.filter((task) => {
-      return (
-        (showActive && task.status === StatusEnum.ACTIVE) ||
-        (showCompleted && task.status === StatusEnum.COMPLETED) ||
-        (!showActive && !showCompleted)
-      );
-    });
-  }, [showActive, showCompleted, tasks]);
-
   const activeTasksCount = useMemo(() => tasks.filter((task) => task.status === StatusEnum.ACTIVE).length, [tasks]);
 
   useEffect(() => {
@@ -115,17 +105,25 @@ const TodoList = () => {
         />
 
         <ul className='todo-list'>
-          {filteredTasks.map((task) => {
-            return (
-              <TodoItem
-                key={task.id}
-                editedText={task.title}
-                {...task}
-                editableTaskId={editableTaskId}
-                {...myHandleFunc}
-              />
-            );
-          })}
+          {tasks
+            .filter((task) => {
+              return (
+                (showActive && task.status === StatusEnum.ACTIVE) ||
+                (showCompleted && task.status === StatusEnum.COMPLETED) ||
+                (!showActive && !showCompleted)
+              );
+            })
+            .map((task) => {
+              return (
+                <TodoItem
+                  key={task.id}
+                  editedText={task.title}
+                  {...task}
+                  editableTaskId={editableTaskId}
+                  {...myHandleFunc}
+                />
+              );
+            })}
         </ul>
 
         {JSON.stringify(tasks) !== '[]' ? (
