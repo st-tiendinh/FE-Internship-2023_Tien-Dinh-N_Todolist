@@ -52,7 +52,7 @@ const TodoList = () => {
     );
   };
 
-  const clearAllCompleted = () => {
+  const handleClearAllCompleted = () => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.status !== StatusEnum.COMPLETED));
   };
 
@@ -157,7 +157,7 @@ const TodoList = () => {
               </li>
             </ul>
 
-            <span className='todo-clear-completed' onClick={clearAllCompleted}>
+            <span className='todo-clear-completed' onClick={handleClearAllCompleted}>
               Clear Completed
             </span>
           </div>
