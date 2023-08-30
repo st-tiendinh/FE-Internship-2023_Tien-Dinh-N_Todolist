@@ -1,5 +1,3 @@
-import React from 'react';
-
 import './stylesheet/style.scss';
 import Home from './app/core/pages/Home';
 
