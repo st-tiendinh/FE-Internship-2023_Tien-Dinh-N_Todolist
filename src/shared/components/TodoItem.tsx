@@ -13,8 +13,6 @@ const TodoItem = ({ id, status, title, tasks, setTasks }: TodoItemPropTypes) => 
   const [editableTaskId, setEditableTaskId] = useState<string>('');
   const [editedText, setEditedText] = useState<string>('');
 
-  console.log('item render');
-
   const handleDoubleClick = (id: string, title: string) => {
     setEditableTaskId(id);
     setEditedText(title);
