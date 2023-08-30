@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { deleteTask, editTask, setCompletedTask } from '../../../../../../shared/redux/action';
-import { StatusEnum } from '../../../../models/todoItem';
+import { deleteTask, editTask, setCompletedTask } from '../../../../../shared/redux/action';
+import { StatusEnum } from '../../../../core/models/todoItem';
 
 interface TodoItemPropTypes {
   id: string;

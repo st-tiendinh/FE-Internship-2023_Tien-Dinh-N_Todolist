@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 
 import { TodoHeader, TodoList, TodoFooter } from './components';
 
-import { TaskInterface, StorageKey, StatusEnum, Tab } from '../../../models/todoItem';
-import { StateInterface } from '../../../../../shared/redux/reducer';
+import { TaskInterface, StorageKey, StatusEnum, Tab } from '../../../../app/core/models/todoItem';
+import { StateInterface } from '../../../../shared/redux/reducer';
 
 export const Todo = () => {
   const [currentTab, setCurrentTab] = useState<Tab>(Tab.ALL);

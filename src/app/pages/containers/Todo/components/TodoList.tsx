@@ -1,5 +1,5 @@
 import TodoItem from './TodoItem';
-import { Tab, TaskInterface } from '../../../../models/todoItem';
+import { TaskInterface, Tab } from '../../../../core/models/todoItem';
 
 interface TodoListPropTypes {
   changeTab: Record<Tab, () => TaskInterface[]>;

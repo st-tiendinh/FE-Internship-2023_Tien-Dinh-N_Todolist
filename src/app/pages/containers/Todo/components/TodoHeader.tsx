@@ -2,10 +2,10 @@ import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
-import completedAllBtn from '../../../../../../assets/images/ic-todo.svg';
+import completedAllBtn from '../../../../../assets/images/ic-todo.svg';
 
-import { setAllCompleted, setTasks } from '../../../../../../shared/redux/action';
-import { StatusEnum } from '../../../../models/todoItem';
+import { setAllCompleted, setTasks } from '../../../../../shared/redux/action';
+import { StatusEnum } from '../../../../core/models/todoItem';
 
 export const TodoHeader = () => {
   const inputRef = useRef<HTMLInputElement>(null);

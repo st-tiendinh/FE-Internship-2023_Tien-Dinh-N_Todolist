@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { StatusEnum, Tab } from '../../../../models/todoItem';
-import { clearAllCompleted } from '../../../../../../shared/redux/action';
-import { StateInterface } from '../../../../../../shared/redux/reducer';
+import { StatusEnum, Tab } from '../../../../../app/core/models/todoItem';
+import { clearAllCompleted } from '../../../../../shared/redux/action';
+import { StateInterface } from '../../../../../shared/redux/reducer';
 
 interface TodoFooterPropTypes {
   currentTab: Tab;
