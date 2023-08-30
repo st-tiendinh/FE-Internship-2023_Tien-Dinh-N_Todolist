@@ -7,6 +7,12 @@ export enum StatusEnum {
   COMPLETED,
 }
 
+export enum Tab {
+  ALL = 'All',
+  ACTIVE = 'Active',
+  COMPLETED = 'Completed',
+}
+
 export interface TaskInterface {
   id: string;
   title: string;

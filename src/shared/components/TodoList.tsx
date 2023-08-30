@@ -1,171 +1,20 @@
-import { useEffect, useState, ChangeEvent } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-
-import { TaskInterface, StorageKey, StatusEnum } from '../../app/core/models/todoItem';
 import TodoItem from './TodoItem';
-import TodoHeader from './TodoHeader';
-import { getFromLocalStorage } from '../utils/local-storage';
+import { Tab, TaskInterface } from '../../app/core/models/todoItem';
 
-const TodoList = () => {
-  const [tasks, setTasks] = useState<TaskInterface[]>(getFromLocalStorage(StorageKey.TASK, []));
-  const [allCompleted, setAllCompleted] = useState<StatusEnum>(0);
-  const [showActive, setShowActive] = useState<boolean>(false);
-  const [showCompleted, setShowCompleted] = useState<boolean>(false);
+interface TodoListPropTypes {
+  tasks: TaskInterface[];
+  setTasks: (tasks: TaskInterface[]) => void;
+  changeTab: any;
+  currentTab: Tab;
+}
 
-  const [editableTaskId, setEditableTaskId] = useState<string>('');
-  const [editedText, setEditedText] = useState<string>('');
-
-  const handleSelectAllCompleted = () => {
-    setAllCompleted(+!allCompleted);
-    setTasks((prevTask) =>
-      prevTask.map((task) => ({
-        ...task,
-        status: allCompleted,
-      }))
-    );
-  };
-
-  const handleSubmitByEnter = (e: React.KeyboardEvent<HTMLInputElement>, input: string) => {
-    if (e.key === 'Enter') {
-      if (input.trim()) {
-        setTasks([{ id: uuidv4(), title: input.trim(), status: StatusEnum.ACTIVE }, ...tasks]);
-      }
-    }
-  };
-
-  const handleSubmitEditedTask = (e: React.KeyboardEvent<HTMLInputElement>, id: string) => {
-    if (e.key === 'Enter') {
-      const findTask = tasks.find((task) => task.id === id);
-      if (findTask) {
-        findTask.title = editedText;
-        setTasks([...tasks]);
-        setEditableTaskId('');
-      }
-    }
-  };
-
-  const handleCompleted = (id: string) => {
-    setTasks(
-      tasks.map((task) => {
-        return task.id === id ? { ...task, status: +!task.status } : task;
-      })
-    );
-  };
-
-  const handleClearAllCompleted = () => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.status !== StatusEnum.COMPLETED));
-  };
-
-  const handleDelete = (id: string) => {
-    setTasks(tasks.filter((todo) => todo.id !== id));
-  };
-
-  const handleDoubleClick = (id: string, title: string) => {
-    setEditableTaskId(id);
-    setEditedText(title);
-  };
-
-  const handleEditText = (e: ChangeEvent<HTMLInputElement>) => {
-    setEditedText(e.target.value);
-  };
-
-  const handleTaskItemInputBlur = (id: string) => {
-    if (editedText.trim()) {
-      const findTask = tasks.find((task) => task.id === id);
-      if (findTask) {
-        findTask.title = editedText;
-        setTasks([...tasks]);
-        setEditableTaskId('');
-      }
-    }
-  };
-
-  useEffect(() => {
-    localStorage.setItem(StorageKey.TASK, JSON.stringify(tasks));
-  }, [tasks]);
-
-  const myHandleFunc = {
-    handleCompleted,
-    handleSubmitEditedTask,
-    handleTaskItemInputBlur,
-    handleDoubleClick,
-    handleDelete,
-    handleEditText,
-  };
-
+const TodoList = ({ tasks, setTasks, changeTab, currentTab }: TodoListPropTypes) => {
   return (
-    <div className='wrapper'>
-      <div className='todo'>
-        <TodoHeader handleSelectAllCompleted={handleSelectAllCompleted} handleSubmitByEnter={handleSubmitByEnter} />
-
-        <ul className='todo-list'>
-          {tasks
-            .filter((task) => {
-              return (
-                (showActive && task.status === StatusEnum.ACTIVE) ||
-                (showCompleted && task.status === StatusEnum.COMPLETED) ||
-                (!showActive && !showCompleted)
-              );
-            })
-            .map((task) => {
-              return (
-                <TodoItem
-                  key={task.id}
-                  editedText={editedText}
-                  {...task}
-                  editableTaskId={editableTaskId}
-                  {...myHandleFunc}
-                />
-              );
-            })}
-        </ul>
-
-        {tasks.length ? (
-          <div className='todo-footer'>
-            <span className='todo-footer-quantity'>
-              {tasks.filter((task) => task.status === StatusEnum.ACTIVE).length} items left
-            </span>
-            <ul className='todo-filter-list'>
-              <li
-                className='todo-filter-item'
-                onClick={() => {
-                  setShowActive(false);
-                  setShowCompleted(false);
-                }}
-              >
-                <span className={`todo-filter-type ${!showActive && !showCompleted && 'active'}`}>All</span>
-              </li>
-
-              <li
-                className='todo-filter-item'
-                onClick={() => {
-                  setShowActive(true);
-                  setShowCompleted(false);
-                }}
-              >
-                <span className={`todo-filter-type ${showActive && 'active'}`}>Active</span>
-              </li>
-
-              <li
-                className='todo-filter-item'
-                onClick={() => {
-                  setShowCompleted(true);
-                  setShowActive(false);
-                }}
-              >
-                <span className={`todo-filter-type ${showCompleted && 'active'}`}>Completed</span>
-              </li>
-            </ul>
-
-            <span className='todo-clear-completed' onClick={handleClearAllCompleted}>
-              Clear Completed
-            </span>
-          </div>
-        ) : (
-          ''
-        )}
-      </div>
-    </div>
+    <ul className="todo-list">
+      {changeTab[currentTab]().map((task: TaskInterface) => {
+        return <TodoItem key={task.id} {...task} setTasks={setTasks} tasks={tasks} />;
+      })}
+    </ul>
   );
 };
 
