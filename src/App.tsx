@@ -1,5 +1,5 @@
 import React from 'react';
-import TodoList from './shared/components/TodoList';
+import TodoList from './shared/components/Todo';
 import './stylesheet/style.scss';
 
 function App() {

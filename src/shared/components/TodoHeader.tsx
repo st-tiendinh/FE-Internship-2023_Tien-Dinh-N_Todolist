@@ -2,12 +2,12 @@ import { ChangeEvent, useState } from 'react';
 
 import completedAllBtn from '../../assets/images/ic-todo.svg';
 
-interface TodoHeaderProps {
+interface TodoHeaderPropTypes {
   handleSelectAllCompleted: () => void;
   handleSubmitByEnter: (event: React.KeyboardEvent<HTMLInputElement>, input: string) => void;
 }
 
-const TodoHeader = ({ handleSelectAllCompleted, handleSubmitByEnter }: TodoHeaderProps) => {
+const TodoHeader = ({ handleSelectAllCompleted, handleSubmitByEnter }: TodoHeaderPropTypes) => {
   const [input, setInput] = useState<string>('');
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +30,7 @@ const TodoHeader = ({ handleSelectAllCompleted, handleSubmitByEnter }: TodoHeade
         value={input}
         autoFocus
         onChange={handleInputChange}
-        onKeyDown={handleSubmit}
+        onKeyUp={handleSubmit}
         placeholder='What need to be done?'
       />
     </div>
