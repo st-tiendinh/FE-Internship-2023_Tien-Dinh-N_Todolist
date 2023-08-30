@@ -1,4 +1,4 @@
-import Todo from '../../../shared/components/Todo';
+import { Todo } from './containers';
 
 const Home = () => {
   return (

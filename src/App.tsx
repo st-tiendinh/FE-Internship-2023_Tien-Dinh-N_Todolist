@@ -1,19 +1,20 @@
 import React from 'react';
-import TodoList from './shared/components/Todo';
+
 import './stylesheet/style.scss';
+import Home from './app/core/pages/Home';
 
 function App() {
   return (
-    <div className='App'>
-      <div className='container'>
-        <header className='header'>
-          <h1 className='header-title'>
-            todos <span className='header-logo'>📒</span>
+    <div className="App">
+      <div className="container">
+        <header className="header">
+          <h1 className="header-title">
+            todos <span className="header-logo">📒</span>
           </h1>
         </header>
-        <main className='main'>
-          <div className='home-page'>
-            <TodoList />
+        <main className="main">
+          <div className="home-page">
+            <Home />
           </div>
         </main>
       </div>
