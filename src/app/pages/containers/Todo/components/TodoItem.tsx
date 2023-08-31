@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { deleteTask, editTask, setCompletedTask } from '../../../../../shared/redux/action';
+import { deleteTask, editTask, setCompletedTask } from '../../../../../redux/action';
 import { StatusEnum } from '../../../../core/models/todoItem';
 
 interface TodoItemPropTypes {
@@ -10,15 +10,15 @@ interface TodoItemPropTypes {
   title: string;
 }
 
-const TodoItem = ({ id, status, title }: TodoItemPropTypes) => {
-  const [editable, setEditable] = useState<boolean>(false);
+export const TodoItem = ({ id, status, title }: TodoItemPropTypes) => {
+  const [isEditable, setIsEditable] = useState<boolean>(false);
   const [input, setInput] = useState<string>(title);
 
   const taskInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
 
   const handleDoubleClick = () => {
-    setEditable(true);
+    setIsEditable(true);
   };
 
   const handleEditText = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,9 +26,10 @@ const TodoItem = ({ id, status, title }: TodoItemPropTypes) => {
   };
 
   const handleTaskItemInputBlur = (id: string) => {
-    setEditable(false);
+    setIsEditable(false);
     if (taskInputRef.current!.value.trim()) {
-      dispatch(editTask(taskInputRef.current!.value, id));
+      dispatch(editTask(taskInputRef.current!.value.trim(), id));
+      setInput(taskInputRef.current!.value.trim());
     }
   };
 
@@ -57,11 +58,10 @@ const TodoItem = ({ id, status, title }: TodoItemPropTypes) => {
       />
       <label className="todo-item-status-label" htmlFor={id}></label>
 
-      {editable ? (
+      {isEditable ? (
         <input
           className="todo-edit-input"
           type="text"
-          // value={taskInputRef.current?.value}
           value={input}
           ref={taskInputRef}
           onChange={handleEditText}
@@ -78,5 +78,3 @@ const TodoItem = ({ id, status, title }: TodoItemPropTypes) => {
     </li>
   );
 };
-
-export default React.memo(TodoItem);

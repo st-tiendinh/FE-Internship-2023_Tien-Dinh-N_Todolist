@@ -1,4 +1,4 @@
-import TodoItem from './TodoItem';
+import { TodoItem } from './TodoItem';
 import { TaskInterface, Tab } from '../../../../core/models/todoItem';
 
 interface TodoListPropTypes {

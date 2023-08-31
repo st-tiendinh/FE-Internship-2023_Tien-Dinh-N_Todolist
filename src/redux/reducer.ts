@@ -1,16 +1,14 @@
-import { StatusEnum, StorageKey, TaskInterface } from '../../app/core/models/todoItem';
-import { getFromLocalStorage } from '../utils/local-storage';
+import { StatusEnum, StorageKey, TaskInterface } from '../app/core/models/todoItem';
+import { getFromLocalStorage } from '../shared/utils/local-storage';
 
 import { SET_TASKS, SET_ALL_COMPLETED, DELETE_TASK, SET_COMPLETED_TASK, CLEAR_ALL_COMPLETED, EDIT_TASK } from './type';
 
 export interface StateInterface {
   tasks: TaskInterface[];
-  allCompleted: StatusEnum;
 }
 
 const initialState: StateInterface = {
   tasks: getFromLocalStorage(StorageKey.TASK, []),
-  allCompleted: 0,
 };
 
 export const taskReducer = (state = initialState, action: any) => {
@@ -37,11 +35,13 @@ export const taskReducer = (state = initialState, action: any) => {
       tasks: state.tasks.map((task) => (task.id === action.payload.id ? { ...task, status: +!task.status } : task)),
     }),
 
-    [SET_ALL_COMPLETED]: () => ({
-      ...state,
-      allCompleted: +!state.allCompleted,
-      tasks: state.tasks.map((task) => ({ ...task, status: state.allCompleted })),
-    }),
+    [SET_ALL_COMPLETED]: () => {
+      const isAllCompleted = state.tasks.every((task) => task.status === StatusEnum.COMPLETED);
+      return {
+        ...state,
+        tasks: state.tasks.map((task) => ({ ...task, status: +!isAllCompleted })),
+      };
+    },
 
     [CLEAR_ALL_COMPLETED]: () => ({
       ...state,

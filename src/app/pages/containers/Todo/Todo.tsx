@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { TodoHeader, TodoList, TodoFooter } from './components';
 
 import { TaskInterface, StorageKey, StatusEnum, Tab } from '../../../../app/core/models/todoItem';
-import { StateInterface } from '../../../../shared/redux/reducer';
+import { StateInterface } from '../../../../redux/reducer';
 
 export const Todo = () => {
   const [currentTab, setCurrentTab] = useState<Tab>(Tab.ALL);
 
   const tasks = useSelector((state: StateInterface) => state.tasks);
 
-  const changeTab: Record<Tab, () => TaskInterface[]> = {
-    [Tab.ALL]: () => tasks,
-    [Tab.ACTIVE]: () => tasks.filter((item: TaskInterface) => item.status === StatusEnum.ACTIVE),
-    [Tab.COMPLETED]: () => tasks.filter((item: TaskInterface) => item.status === StatusEnum.COMPLETED),
-  };
+  const changeTab: Record<Tab, () => TaskInterface[]> = useMemo(() => {
+    return {
+      [Tab.ALL]: () => tasks,
+      [Tab.ACTIVE]: () => tasks.filter((item: TaskInterface) => item.status === StatusEnum.ACTIVE),
+      [Tab.COMPLETED]: () => tasks.filter((item: TaskInterface) => item.status === StatusEnum.COMPLETED),
+    };
+  }, [tasks]);
 
   useEffect(() => {
     localStorage.setItem(StorageKey.TASK, JSON.stringify(tasks));
