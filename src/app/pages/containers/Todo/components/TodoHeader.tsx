@@ -17,7 +17,7 @@ export const TodoHeader = () => {
   const handleSubmitByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const inputValue = inputRef.current!.value;
     if (e.key === 'Enter' && inputValue.trim()) {
-      dispatch(setTasks({ id: Date.now(), title: inputValue.trim(), status: StatusEnum.ACTIVE }));
+      dispatch(setTasks({ id: Date.now().toString(), title: inputValue.trim(), status: StatusEnum.ACTIVE }));
       inputRef.current!.value = '';
     }
   };

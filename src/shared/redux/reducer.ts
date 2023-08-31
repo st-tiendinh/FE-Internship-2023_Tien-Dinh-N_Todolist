@@ -17,22 +17,24 @@ export const taskReducer = (state = initialState, action: any) => {
   const objReducer: Record<string, () => StateInterface> = {
     [SET_TASKS]: () => ({
       ...state,
-      tasks: [{ ...action.payload }, ...state.tasks],
+      tasks: [action.payload.tasks, ...state.tasks],
     }),
 
     [DELETE_TASK]: () => ({
       ...state,
-      tasks: state.tasks.filter((task) => task.id !== action.id),
+      tasks: state.tasks.filter((task) => task.id !== action.payload.id),
     }),
 
     [EDIT_TASK]: () => ({
       ...state,
-      tasks: state.tasks.map((task) => (task.id === action.id ? { ...task, title: action.title } : task)),
+      tasks: state.tasks.map((task) =>
+        task.id === action.payload.id ? { ...task, title: action.payload.title } : task
+      ),
     }),
 
     [SET_COMPLETED_TASK]: () => ({
       ...state,
-      tasks: state.tasks.map((task) => (task.id === action.id ? { ...task, status: +!task.status } : task)),
+      tasks: state.tasks.map((task) => (task.id === action.payload.id ? { ...task, status: +!task.status } : task)),
     }),
 
     [SET_ALL_COMPLETED]: () => ({
