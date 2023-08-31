@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
 
 import completedAllBtn from '../../../../../assets/images/ic-todo.svg';
 
@@ -18,7 +17,7 @@ export const TodoHeader = () => {
   const handleSubmitByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const inputValue = inputRef.current!.value;
     if (e.key === 'Enter' && inputValue.trim()) {
-      dispatch(setTasks({ id: uuidv4(), title: inputValue.trim(), status: StatusEnum.ACTIVE }));
+      dispatch(setTasks({ id: Date.now(), title: inputValue.trim(), status: StatusEnum.ACTIVE }));
       inputRef.current!.value = '';
     }
   };
