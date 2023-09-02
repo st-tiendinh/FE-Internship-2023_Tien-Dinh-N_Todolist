@@ -1,7 +1,14 @@
 import { StatusEnum, StorageKey, TaskInterface } from '../app/core/models/todoItem';
 import { getFromLocalStorage } from '../shared/utils/local-storage';
 
-import { SET_TASKS, SET_ALL_COMPLETED, DELETE_TASK, SET_COMPLETED_TASK, CLEAR_ALL_COMPLETED, EDIT_TASK } from './type';
+import {
+  SET_TASKS,
+  SET_ALL_COMPLETED,
+  DELETE_TASK,
+  SET_COMPLETED_TASK,
+  CLEAR_ALL_COMPLETED,
+  EDIT_TASK,
+} from './type';
 
 export interface StateInterface {
   tasks: TaskInterface[];
@@ -32,7 +39,9 @@ export const taskReducer = (state = initialState, action: any) => {
 
     [SET_COMPLETED_TASK]: () => ({
       ...state,
-      tasks: state.tasks.map((task) => (task.id === action.payload.id ? { ...task, status: +!task.status } : task)),
+      tasks: state.tasks.map((task) =>
+        task.id === action.payload.id ? { ...task, status: +!task.status } : task
+      ),
     }),
 
     [SET_ALL_COMPLETED]: () => {

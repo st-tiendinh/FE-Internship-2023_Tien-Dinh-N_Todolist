@@ -28,8 +28,21 @@ export const TodoItem = ({ id, status, title }: TodoItemPropTypes) => {
   const handleTaskItemInputBlur = (id: string) => {
     setIsEditable(false);
     if (taskInputRef.current!.value.trim()) {
-      dispatch(editTask(taskInputRef.current!.value.trim(), id));
-      setInput(taskInputRef.current!.value.trim());
+      dispatch(
+        editTask(
+          taskInputRef
+            .current!.value.split(' ')
+            .filter((word) => word !== '')
+            .join(' '),
+          id
+        )
+      );
+      setInput(
+        taskInputRef
+          .current!.value.split(' ')
+          .filter((word) => word !== '')
+          .join(' ')
+      );
     }
   };
 
@@ -70,7 +83,10 @@ export const TodoItem = ({ id, status, title }: TodoItemPropTypes) => {
           autoFocus
         />
       ) : (
-        <span className={status ? 'todo-title text-completed' : 'todo-title'} onDoubleClick={handleDoubleClick}>
+        <span
+          className={status ? 'todo-title text-completed' : 'todo-title'}
+          onDoubleClick={handleDoubleClick}
+        >
           {title}
         </span>
       )}

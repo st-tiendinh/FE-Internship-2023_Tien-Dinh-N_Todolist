@@ -8,14 +8,13 @@ import { StateInterface } from '../../../../redux/reducer';
 
 export const Todo = () => {
   const [currentTab, setCurrentTab] = useState<Tab>(Tab.ALL);
-
   const tasks = useSelector((state: StateInterface) => state.tasks);
-
   const changeTab: Record<Tab, () => TaskInterface[]> = useMemo(() => {
     return {
       [Tab.ALL]: () => tasks,
       [Tab.ACTIVE]: () => tasks.filter((item: TaskInterface) => item.status === StatusEnum.ACTIVE),
-      [Tab.COMPLETED]: () => tasks.filter((item: TaskInterface) => item.status === StatusEnum.COMPLETED),
+      [Tab.COMPLETED]: () =>
+        tasks.filter((item: TaskInterface) => item.status === StatusEnum.COMPLETED),
     };
   }, [tasks]);
 
@@ -27,9 +26,7 @@ export const Todo = () => {
     <div className="wrapper">
       <div className="todo">
         <TodoHeader />
-
         <TodoList changeTab={changeTab} currentTab={currentTab} />
-
         {tasks.length ? <TodoFooter currentTab={currentTab} setCurrentTab={setCurrentTab} /> : ''}
       </div>
     </div>

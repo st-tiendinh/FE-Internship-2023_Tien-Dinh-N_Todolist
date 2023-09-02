@@ -22,7 +22,14 @@ export const TodoHeader = memo(() => {
   const handleSubmit = () => {
     if (inputRef.current!.value.trim()) {
       dispatch(
-        setTasks({ id: Date.now().toString(), title: inputRef.current!.value.trim(), status: StatusEnum.ACTIVE })
+        setTasks({
+          id: Date.now().toString(),
+          title: inputRef
+            .current!.value.split(' ')
+            .filter((word) => word !== '')
+            .join(' '),
+          status: StatusEnum.ACTIVE,
+        })
       );
     }
     inputRef.current!.value = '';
@@ -36,7 +43,12 @@ export const TodoHeader = memo(() => {
 
   return (
     <div className="todo-header">
-      <img src={completedAllBtn} onClick={handleSelectAllCompleted} alt="" className="todo-header-img" />
+      <img
+        src={completedAllBtn}
+        onClick={handleSelectAllCompleted}
+        alt=""
+        className="todo-header-img"
+      />
       <input
         className="todo-header-input"
         type="text"

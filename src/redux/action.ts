@@ -1,5 +1,12 @@
 import { TaskInterface } from '../app/core/models/todoItem';
-import { SET_TASKS, SET_COMPLETED_TASK, SET_ALL_COMPLETED, DELETE_TASK, CLEAR_ALL_COMPLETED, EDIT_TASK } from './type';
+import {
+  SET_TASKS,
+  SET_COMPLETED_TASK,
+  SET_ALL_COMPLETED,
+  DELETE_TASK,
+  CLEAR_ALL_COMPLETED,
+  EDIT_TASK,
+} from './type';
 
 export const setTasks = (tasks: TaskInterface) => {
   return { type: SET_TASKS, payload: { tasks } };
