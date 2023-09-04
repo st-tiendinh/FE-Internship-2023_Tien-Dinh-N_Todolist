@@ -13,7 +13,7 @@ export enum Tab {
   COMPLETED = 'Completed',
 }
 
-export interface TaskInterface {
+export interface TaskProps {
   id: string;
   title: string;
   status: StatusEnum;

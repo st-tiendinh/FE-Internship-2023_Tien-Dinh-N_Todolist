@@ -1,4 +1,4 @@
-import { TaskInterface } from '../app/core/models/todoItem';
+import { TaskProps } from '../app/core/models/todoItem';
 import {
   SET_TASKS,
   SET_COMPLETED_TASK,
@@ -8,7 +8,7 @@ import {
   EDIT_TASK,
 } from './type';
 
-export const setTasks = (tasks: TaskInterface) => {
+export const setTasks = (tasks: TaskProps) => {
   return { type: SET_TASKS, payload: { tasks } };
 };
 

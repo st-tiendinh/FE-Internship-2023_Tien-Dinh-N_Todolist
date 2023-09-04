@@ -3,18 +3,18 @@ import { useSelector } from 'react-redux';
 
 import { TodoHeader, TodoList, TodoFooter } from './components';
 
-import { TaskInterface, StorageKey, StatusEnum, Tab } from '../../../../app/core/models/todoItem';
+import { TaskProps, StorageKey, StatusEnum, Tab } from '../../../../app/core/models/todoItem';
 import { StateInterface } from '../../../../redux/reducer';
 
 export const Todo = () => {
   const [currentTab, setCurrentTab] = useState<Tab>(Tab.ALL);
   const tasks = useSelector((state: StateInterface) => state.tasks);
-  const changeTab: Record<Tab, () => TaskInterface[]> = useMemo(() => {
+  const changeTab: Record<Tab, () => TaskProps[]> = useMemo(() => {
     return {
       [Tab.ALL]: () => tasks,
-      [Tab.ACTIVE]: () => tasks.filter((item: TaskInterface) => item.status === StatusEnum.ACTIVE),
+      [Tab.ACTIVE]: () => tasks.filter((item: TaskProps) => item.status === StatusEnum.ACTIVE),
       [Tab.COMPLETED]: () =>
-        tasks.filter((item: TaskInterface) => item.status === StatusEnum.COMPLETED),
+        tasks.filter((item: TaskProps) => item.status === StatusEnum.COMPLETED),
     };
   }, [tasks]);
 

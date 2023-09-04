@@ -1,4 +1,4 @@
-import { StatusEnum, StorageKey, TaskInterface } from '../app/core/models/todoItem';
+import { StatusEnum, StorageKey, TaskProps } from '../app/core/models/todoItem';
 import { getFromLocalStorage } from '../shared/utils/local-storage';
 
 import {
@@ -11,7 +11,7 @@ import {
 } from './type';
 
 export interface StateInterface {
-  tasks: TaskInterface[];
+  tasks: TaskProps[];
 }
 
 const initialState: StateInterface = {
