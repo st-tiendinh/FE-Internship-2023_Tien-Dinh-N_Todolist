@@ -1,37 +1,48 @@
-import React, { ChangeEvent, useState } from 'react';
-import { StatusEnum, TaskInterface } from '../../app/core/models/todoItem';
+import React, { ChangeEvent, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { deleteTask, editTask, setCompletedTask } from '../../../../../redux/action';
+import { StatusEnum } from '../../../../core/models/todoItem';
 
 interface TodoItemPropTypes {
   id: string;
   status: StatusEnum;
   title: string;
-  tasks: TaskInterface[];
-  setTasks: (tasks: TaskInterface[]) => void;
 }
 
-const TodoItem = ({ id, status, title, tasks, setTasks }: TodoItemPropTypes) => {
-  const [editableTaskId, setEditableTaskId] = useState<string>('');
-  const [editedText, setEditedText] = useState<string>('');
+export const TodoItem = ({ id, status, title }: TodoItemPropTypes) => {
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [input, setInput] = useState<string>(title);
 
-  console.log('item render');
+  const taskInputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
 
-  const handleDoubleClick = (id: string, title: string) => {
-    setEditableTaskId(id);
-    setEditedText(title);
+  const handleDoubleClick = () => {
+    setIsEditable(true);
   };
 
   const handleEditText = (e: ChangeEvent<HTMLInputElement>) => {
-    setEditedText(e.target.value);
+    setInput(e.target.value);
   };
 
   const handleTaskItemInputBlur = (id: string) => {
-    if (editedText.trim()) {
-      const findTask = tasks.find((task) => task.id === id);
-      if (findTask) {
-        findTask.title = editedText;
-        setTasks([...tasks]);
-        setEditableTaskId('');
-      }
+    setIsEditable(false);
+    if (taskInputRef.current!.value.trim()) {
+      dispatch(
+        editTask(
+          taskInputRef
+            .current!.value.split(' ')
+            .filter((word) => word !== '')
+            .join(' '),
+          id
+        )
+      );
+      setInput(
+        taskInputRef
+          .current!.value.split(' ')
+          .filter((word) => word !== '')
+          .join(' ')
+      );
     }
   };
 
@@ -42,33 +53,30 @@ const TodoItem = ({ id, status, title, tasks, setTasks }: TodoItemPropTypes) => 
   };
 
   const handleCompleted = (id: string) => {
-    setTasks(
-      tasks.map((task) => {
-        return task.id === id ? { ...task, status: +!task.status } : task;
-      })
-    );
+    dispatch(setCompletedTask(id));
   };
 
   const handleDelete = (id: string) => {
-    setTasks(tasks.filter((todo) => todo.id !== id));
+    dispatch(deleteTask(id));
   };
 
   return (
     <li key={id} className="todo-item">
       <input
+        className="todo-item-status-checkbox"
         type="checkbox"
         checked={Boolean(status)}
         onChange={() => handleCompleted(id)}
-        className="todo-item-status-checkbox"
         id={id}
       />
       <label className="todo-item-status-label" htmlFor={id}></label>
 
-      {editableTaskId === id ? (
+      {isEditable ? (
         <input
           className="todo-edit-input"
           type="text"
-          value={editedText}
+          value={input}
+          ref={taskInputRef}
           onChange={handleEditText}
           onKeyUp={(e) => handleSubmitEditedTask(e, id)}
           onBlur={() => handleTaskItemInputBlur(id)}
@@ -77,7 +85,7 @@ const TodoItem = ({ id, status, title, tasks, setTasks }: TodoItemPropTypes) => 
       ) : (
         <span
           className={status ? 'todo-title text-completed' : 'todo-title'}
-          onDoubleClick={() => handleDoubleClick(id, title)}
+          onDoubleClick={handleDoubleClick}
         >
           {title}
         </span>
@@ -86,5 +94,3 @@ const TodoItem = ({ id, status, title, tasks, setTasks }: TodoItemPropTypes) => 
     </li>
   );
 };
-
-export default React.memo(TodoItem);

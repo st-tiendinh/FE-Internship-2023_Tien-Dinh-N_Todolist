@@ -1,18 +1,27 @@
-import { StatusEnum, Tab, TaskInterface } from '../../app/core/models/todoItem';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { StatusEnum, Tab } from '../../../../../app/core/models/todoItem';
+import { clearAllCompleted } from '../../../../../redux/action';
+import { StateInterface } from '../../../../../redux/reducer';
 
 interface TodoFooterPropTypes {
-  tasks: TaskInterface[];
-  handleClearAllCompleted: () => void;
   currentTab: Tab;
   setCurrentTab: (tab: Tab) => void;
 }
 
-const TodoFooter = ({ tasks, handleClearAllCompleted, currentTab, setCurrentTab }: TodoFooterPropTypes) => {
+export const TodoFooter = ({ currentTab, setCurrentTab }: TodoFooterPropTypes) => {
   const tabs = [Tab.ALL, Tab.ACTIVE, Tab.COMPLETED];
+  const tasks = useSelector((state: StateInterface) => state.tasks);
+  const dispatch = useDispatch();
+
+  const handleClearAllCompleted = () => {
+    dispatch(clearAllCompleted());
+  };
+
   return (
     <div className="todo-footer">
       <span className="todo-footer-quantity">
-        {tasks.filter((task) => task.status === StatusEnum.ACTIVE).length} items left
+        {tasks.filter((task) => task.status === StatusEnum.ACTIVE).length} item(s) left
       </span>
       <ul className="todo-filter-list">
         {tabs.map((tab, index) => (
@@ -28,5 +37,3 @@ const TodoFooter = ({ tasks, handleClearAllCompleted, currentTab, setCurrentTab 
     </div>
   );
 };
-
-export default TodoFooter;
